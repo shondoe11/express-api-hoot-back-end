@@ -1,20 +1,26 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    //? username: String
+    username: {
+      type: String,
+      minLength: 3,
+      required: true,
+    },
+    hashedPassword: {
+      type: String,
+      required: true,
+    },
   },
-  hashedPassword: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
-userSchema.set('toJSON', {
+//* when res.json(user) -> strip out the password hash
+userSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     delete returnedObject.hashedPassword;
-  }
+  },
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
